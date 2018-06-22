@@ -6,12 +6,12 @@ class TrueCrime::TrueCrimeController
 
   attr_reader :docs_urls, :documentary_attributes
 
+  INDEX_PAGE_URL = "http://crimedocumentary.com"
+
   def initialize
     @docs_urls = []
     @documentary_attributes = []
   end
-
-  INDEX_PAGE_URL = "http://crimedocumentary.com"
 
   def run
     welcome
@@ -22,11 +22,14 @@ class TrueCrime::TrueCrimeController
     urls = TrueCrimeScraper.scrape_urls(INDEX_PAGE_URL)
     urls.each {|url| docs_urls << url}
   end
+  
   # this is the method that can deliver selection-specific data on-demand
   # versus pulling it all at the start of the program
   def get_documentary_attributes
+    docs = []
     docs_urls.each do |path|
-      documentary_attributes << TrueCrimeScraper.scrape_documentary_attributes(path)
+      docs =  TrueCrimeScraper.scrape_documentary_attributes(path)
+      docs.each {|attributes| documentary_attributes << attributes}
     end
   end
 
@@ -46,9 +49,9 @@ class TrueCrime::TrueCrimeController
     puts "One moment... Gathering information."
     puts "\n"
     get_urls
-    puts "Getting information"
+    puts "Getting attributes."
     get_documentary_attributes
-    puts "Building collection"
+    puts "Building collection."
     add_documentary_attributes
   end
 
@@ -60,7 +63,6 @@ class TrueCrime::TrueCrimeController
     binding.pry
     puts "Enter selection: \n"
     input = gets.strip.downcase
-    binding.pry
     while input != 'exit' do
       category = Category.all
       documentary = Documentary.all
