@@ -24,18 +24,18 @@ class Category
     self.class.all << self
   end
 
-  def self.create(name)
-    category = self.new(name)
+  def self.create_by_name(category_name)
+    category = self.new(category_name)
     category.save
     category
   end
 
-  def find_by_name(name)
-    self.all.detect {|category| category.name = name}
+  def self.find_by_name(category_name)
+    self.all.detect {|category| category.name = category_name}
   end
 
-  def find_or_create_by_name(name)
-    find_by_name(name) || self.create(name)
+  def self.find_or_create_by_name(category_name)
+    self.find_by_name(category_name) || self.create_by_name(category_name)
   end
 
   def docs_count
