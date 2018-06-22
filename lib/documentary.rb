@@ -7,6 +7,8 @@ class Documentary
 
   @@all = []
 
+  INDEX_PAGE_URL = "http://crimedocumentary.com"
+
   def initialize(hash)
     hash.each do |key, value|
       self.send("#{key}=", value)
@@ -27,18 +29,21 @@ class Documentary
   end
 
   def self.create_documentary_from_collection(urls_array)
-    urls_array.each do |doc_attributes|
-      documentary = self.new(doc_attributes)
-      binding.pry
-      documentary.category = Category.find_or_create_by_name(doc_attributes[:category])
-      binding.pry
-      documentary.save
-    end
+      urls_array.each do |attributes|
+        documentary = self.new(attributes)
+        documentary.category = Category.find_or_create_by_name(category)
+        binding.pry
+        documentary.category.documentaries << self unless documentary.category.documentaries.include?(self)
+      end
+    binding.pry
   end
-  #this assumes that the category is already an object. why? how?
+
   def category=(category)
     @category = category
-    category.documentaries << self unless category.documentaries.include?(self)
+  end
+
+  def categories
+    @categories.uniq
   end
 
   def self.docs_count
