@@ -43,6 +43,10 @@ class Category
     self.find_by_name(category_name) || self.create_by_name(category_name)
   end
 
+  def self.alphabetical
+    self.all.sort_by {|category| category.name}
+  end
+
   def docs_count
     self.documentaries.count
   end
