@@ -37,6 +37,14 @@ class Documentary
     end
   end
 
+  def self.alphabetical
+    self.all.sort_by {|documentary| documentary.title}
+  end
+
+  # def self.alpha_lister(char)
+  #   self.all.find_all {|documentary| documentary.title.upcase.start_with?(char.upcase)}
+  # end
+
   def self.docs_count
     self.all.count
   end
