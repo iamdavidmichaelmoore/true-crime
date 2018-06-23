@@ -47,7 +47,7 @@ class TrueCrime::TrueCrimeController
     puts "One moment... Gathering information."
     puts "\n"
     get_urls
-    puts "Building collection."
+    puts "Building collection. This will take a while..."
     get_documentary_attributes
     add_documentary_attributes
   end
@@ -60,7 +60,7 @@ class TrueCrime::TrueCrimeController
     puts "Enter selection: \n"
     input = gets.strip.downcase
     while input != 'exit' do
-      cat = Category.all
+      category = Category.all
       documentary = Documentary.all
       case
       when input =='quit'.downcase
@@ -68,14 +68,14 @@ class TrueCrime::TrueCrimeController
         puts "Thank you! Good-bye!"
         puts "\n"
         exit
-      when input == (cat.count + 1).to_s
+      when input == (category.count + 1).to_s
         documentary_titles_menu
         break
-      when cat.include?(cat[input.to_i - 1])
-        list_documentaries_in_category(cat[input.to_i - 1])
+      when category.include?(category[input.to_i - 1])
+        list_documentaries_in_category(category[input.to_i - 1])
         break
-      when cat.include?(cat[input.to_i - 1])
-        list_documentaries_in_category(cat[input.to_i - 1])
+      when category.include?(category[input.to_i - 1])
+        list_documentaries_in_category(category[input.to_i - 1])
         break
       else
         call
@@ -88,7 +88,7 @@ class TrueCrime::TrueCrimeController
     puts "Enter number for title. Type 'Return' for categories menu or 'Quit'.\n"
     input = gets.strip
     while input != 'exit' do
-      documentary = Documentary.all.sort_by {|doc| doc.title}
+      documentary = Documentary.alphabetical
       case
       when input == 'quit'.downcase
         puts "\n"
@@ -98,8 +98,8 @@ class TrueCrime::TrueCrimeController
       when input == 'return'.downcase
         call
         break
-      when doc.include?(doc[input.to_i - 1])
-        display_doc_info(doc[input.to_i - 1], input.to_i)
+      when documentary.include?(documentary[input.to_i - 1])
+        display_documentary_info(documentary[input.to_i - 1], input.to_i)
         break
       else
         documentary_titles_menu
@@ -108,28 +108,40 @@ class TrueCrime::TrueCrimeController
   end
 
   def list_categories
-    sorted_list = Category.all.sort_by {|cat| cat.name}
+    categories = Category.alphabetical
     puts "--------------------------"
     puts "  True Crime Categories"
     puts "--------------------------"
-    sorted_list.each.with_index(1) do |cat, num|
-      puts "#{num}. #{cat.name} (#{cat.docs_count})"
+    categories.each.with_index(1) do |category, num|
+      puts "#{num}. #{category.name} (#{category.docs_count})"
     end
     puts "-------------------------"
-    puts "#{sorted_list.count + 1}. Browse By Title (#{Documentary.docs_count})"
+    puts "#{categories.count + 1}. Browse By Title (#{Documentary.docs_count})"
     puts "\n"
   end
 
   def list_documentaries
-    documentaries = Documentary.all.sort_by {|documentary| documentary.title}
+    documentaries = Documentary.alphabetical
     puts "-----------------------------------------------------------------------------"
     puts "  True Crime Documentaries | #{documentaries.count} title(s)"
     puts "-----------------------------------------------------------------------------"
     documentaries.each.with_index(1) do |documentary, num|
       puts "#{num}. #{documentary.title} - (#{documentary.year}) - #{documentary.category.name}"
-      puts "-----------------------------------------------------------------------------"
     end
     puts "\n"
+    # alpha = ('a'..'z').to_a
+    # index = 1
+    # alpha.each do |char|
+    #   list = Documentary.alpha_lister(char)
+    #   count = list.count
+    #   puts "\n"
+    #   puts "#{char.upcase}#{char.upcase}#{char.upcase}------------------------------"
+    #   list.each.with_index(index) do |documentary, num|
+    #     puts "#{num}. #{documentary.title} - (#{documentary.year}) - #{documentary.category.name}"
+    #   end
+    #   index += count
+    # end
+    # puts "\n"
   end
 
   def list_documentaries_in_category(category)
