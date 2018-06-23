@@ -42,7 +42,7 @@ class TrueCrime::TrueCrimeController
     puts"  | || |  | |_| |  __/ | |___| |  | | | | | | |  __/"
     puts"  |_||_|   \/__,_|\/___|  \/____|_|  |_|_| |_| |_|\/___|"
     puts "\n"
-    puts "Welcome to True Crime Documentary database!"
+    puts "Welcome to the  True Crime Documentary Database!"
     puts "\n"
     puts "One moment... Gathering information."
     puts "\n"
@@ -126,22 +126,10 @@ class TrueCrime::TrueCrimeController
     puts "  True Crime Documentaries | #{documentaries.count} title(s)"
     puts "-----------------------------------------------------------------------------"
     documentaries.each.with_index(1) do |documentary, num|
-      puts "#{num}. #{documentary.title} - (#{documentary.year}) - #{documentary.category.name}"
+      puts "#{num}." + " #{documentary.title}".colorize(:red) + "- (#{documentary.year}) - #{documentary.category.name}"
+      puts "-----------------------------------------------------------------------------"
     end
     puts "\n"
-    # alpha = ('a'..'z').to_a
-    # index = 1
-    # alpha.each do |char|
-    #   list = Documentary.alpha_lister(char)
-    #   count = list.count
-    #   puts "\n"
-    #   puts "#{char.upcase}#{char.upcase}#{char.upcase}------------------------------"
-    #   list.each.with_index(index) do |documentary, num|
-    #     puts "#{num}. #{documentary.title} - (#{documentary.year}) - #{documentary.category.name}"
-    #   end
-    #   index += count
-    # end
-    # puts "\n"
   end
 
   def list_documentaries_in_category(category)
