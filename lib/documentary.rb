@@ -7,8 +7,6 @@ class Documentary
 
   @@all = []
 
-  INDEX_PAGE_URL = "http://crimedocumentary.com"
-
   def initialize(hash)
     hash.each do |key, value|
       self.send("#{key}=", value)
@@ -28,22 +26,15 @@ class Documentary
     self.class.all << self
   end
 
-  def self.create_documentary_from_collection(urls_array)
-      urls_array.each do |attributes|
-        documentary = self.new(attributes)
-        documentary.category = Category.find_or_create_by_name(category)
-        binding.pry
-        documentary.category.documentaries << self unless documentary.category.documentaries.include?(self)
+  def self.create_documentary_from_collection(attributes_hash_array)
+    attributes_hash_array.each do |attributes|
+      documentary = self.new(attributes)
+      category = Category.find_or_create_by_name(attributes[:category])
+      documentary.category = category
+      unless category.documentaries.include?(documentary)
+        category.documentaries << documentary
       end
-    binding.pry
-  end
-
-  def category=(category)
-    @category = category
-  end
-
-  def categories
-    @categories.uniq
+    end
   end
 
   def self.docs_count
