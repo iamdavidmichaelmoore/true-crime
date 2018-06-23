@@ -22,7 +22,7 @@ class TrueCrime::TrueCrimeController
     urls = TrueCrimeScraper.scrape_urls(INDEX_PAGE_URL)
     urls.each {|url| docs_urls << url}
   end
-  
+
   # this is the method that can deliver selection-specific data on-demand
   # versus pulling it all at the start of the program
   def get_documentary_attributes
@@ -49,9 +49,8 @@ class TrueCrime::TrueCrimeController
     puts "One moment... Gathering information."
     puts "\n"
     get_urls
-    puts "Getting attributes."
-    get_documentary_attributes
     puts "Building collection."
+    get_documentary_attributes
     add_documentary_attributes
   end
 
@@ -60,7 +59,6 @@ class TrueCrime::TrueCrimeController
     puts "Enter a number for category. Type 'Quit' to end the program."
     puts "You may need to scroll up to see your options/results."
     list_categories
-    binding.pry
     puts "Enter selection: \n"
     input = gets.strip.downcase
     while input != 'exit' do
@@ -72,24 +70,13 @@ class TrueCrime::TrueCrimeController
         puts "Thank you! Good-bye!"
         puts "\n"
         exit
-      when input == (category.count + 1).to_s && documentary.empty?
-        puts "Getting more information. This will take a few seconds..."
-        make_documentaries
-        make_collection
+      when input == (category.count + 1).to_s
         documentary_titles_menu
         break
-      when input == (category.count + 1).to_s && !documentary.empty?
-        make_collection
-        documentary_titles_menu
-        break
-      when category.include?(category[input.to_i - 1]) && documentary.empty?
-        puts "Getting more information. This will take a few seconds..."
-        make_documentaries
-        make_collection
+      when category.include?(category[input.to_i - 1])
         list_documentaries_in_category(category[input.to_i - 1])
         break
-      when category.include?(category[input.to_i - 1]) && !documentary.empty?
-        make_collection
+      when category.include?(category[input.to_i - 1])
         list_documentaries_in_category(category[input.to_i - 1])
         break
       else
@@ -104,7 +91,6 @@ class TrueCrime::TrueCrimeController
     input = gets.strip
     while input != 'exit' do
       documentary = Documentary.all.sort_by {|documentary| documentary.title}
-      # binding.pry
       case
       when input == 'quit'.downcase
         puts "\n"
