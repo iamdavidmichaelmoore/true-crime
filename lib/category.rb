@@ -7,8 +7,7 @@ class Category
 
   @@all = []
 
-  def initialize(name)
-    @name = name
+  def initialize
     @documentaries = []
   end
 
@@ -24,14 +23,20 @@ class Category
     self.class.all << self
   end
 
-  def self.create_by_name(category_name)
-    category = self.new(category_name)
+  def self.create
+    category = Category.new
     category.save
     category
   end
 
+  def self.create_by_name(category_name)
+    category = self.create
+    category.name = category_name
+    category
+  end
+
   def self.find_by_name(category_name)
-    self.all.detect {|category| category.name = category_name}
+    self.all.detect {|category| category.name == category_name}
   end
 
   def self.find_or_create_by_name(category_name)
